@@ -3,10 +3,11 @@
 abstract class View {
 	
 	private
-		$data = array(),
-		$css_includes = array(),
-		$js_includes = array();
-	
+		$data = [],
+		$css_includes = [],
+		$js_includes = [];
+
+
 	// ==================
 	// Abstract Functions
 	// ==================
@@ -50,10 +51,9 @@ abstract class View {
 	// ===============
 	// Class Functions
 	// ===============
-	
-		
+
 	// This is the main function where the entire page is assembled.
-	final public function getViewContents($ob_contents = '') {
+	final public function getViewContents(string $ob_contents = '') : string {
 		$str = "
 			<!DOCTYPE html>
 			<html>
@@ -115,7 +115,6 @@ abstract class View {
 		return $str;
 	}
 	
-	
 	// Adds a css file, but ensures there is only one copy sharing the same key.
 	final protected function addCss($key, $source) {
 		$this->css_includes[$key] = $source;
@@ -128,7 +127,7 @@ abstract class View {
 	
 	// Returns a string containing link tags for all css includes.
 	final private function getCssIncludes() {
-		$css_include_tags = array();
+		$css_include_tags = [];
 		foreach ($this->css_includes as $source) {
 			$css_include_tags[] = "<link rel='stylesheet' href='".$source."'>";
 		}
@@ -137,7 +136,7 @@ abstract class View {
 	
 	// Returns a string containing script tags for all javascript includes.
 	final private function getJavascriptIncludes() {
-		$js_include_tags = array();
+		$js_include_tags = [];
 		foreach ($this->js_includes as $source) {
 			$js_include_tags[] = "<script src='".$source."'></script>";
 		}
@@ -162,14 +161,14 @@ abstract class View {
 	
 	// Returns the title of the site.
 	final private function getSiteTitle() {
-		return 'Job Hunt';
+		return SITE_TITLE;
 	}
 	
 	// Returns the header content for the site.
 	final private function getSiteHeaderContent() {
 		$str = "
 			<h1>
-				<a href='/'>Job Hunt</a>
+				<a href='/'>" . SITE_TITLE . "</a>
 			</h1>
 		";
 		return $str;

@@ -3,7 +3,7 @@
 	// Adapted from: http://stackoverflow.com/a/21637531
 	class Calling {
 	
-		public static function run($query_string = null) {
+		public static function run(string $query_string = null) {
 			// Parse out the controller name and action into the call params.
 			if (is_null($query_string)) {
 				$q_string = $_SERVER['QUERY_STRING'];
@@ -11,7 +11,7 @@
 				$q_string = $query_string;
 			}
 			$q_string = preg_replace('/(\/$|^\/)/', '', $q_string);
-			$call_params = (!empty($q_string) ? explode('/', $q_string) : array());
+			$call_params = (!empty($q_string) ? explode('/', $q_string) : []);
 			
 			// All controllers have suffix "Controller", such as NameController.php and a matching class name.
 			// If no controller name given, use IndexController.php.
@@ -52,5 +52,4 @@
 			// Display the view.
 			$controller->display($ob_contents);
 		}
-		
 	}

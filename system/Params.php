@@ -2,11 +2,10 @@
 
 // Use this class to access $_POST variables. They'll be saved in $_SESSION instead.
 class Params {
-
 	
 	// Initializes the $_SESSION['params'] variable.
 	public static function init() {
-		$_SESSION['params'] = array();
+		$_SESSION['params'] = [];
 	}
 	
 	// Returns whether the $_SESSION['params'] variable is set.
@@ -32,9 +31,7 @@ class Params {
 	public static function getAll() {
 		return $_SESSION['params'];
 	}
-	
-	
-	
+
 	// Performs the Post/Get/Redirect process.
 	public static function postGetRedirect() {
 		// Check to see if there is POST data.
@@ -64,5 +61,4 @@ class Params {
 		unset($_SESSION['params']);
 	}
 
-	
 }

@@ -1,8 +1,11 @@
 <?php
 
 abstract class Model {
-	
-	
+
+  // ==================
+  // Abstract Functions
+  // ==================
+
 	// Should return an array of object variable names.
 	protected abstract function getVarNames();
 	
@@ -20,6 +23,12 @@ abstract class Model {
 	
 	// Should return the value of the primary key.
 	public abstract function getId();
+
+
+
+  // ===============
+  // Class Functions
+  // ===============
 	
 	// Sets the id (primary key field) for the object.
 	protected function setId($id) {
@@ -27,21 +36,22 @@ abstract class Model {
 		$this->$primary_key_name = $id;
 	}
 	
-	
 	// Loads this object from the database specified by the table name and the primary key (id) value.
-	protected function loadFromDb($key_value) {
-		$query = "SELECT * FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKeyName()." = ?";
+	protected function loadFromDb(string $key_value) {
+		$query = "
+      SELECT *
+      FROM ".$this->getTableName()."
+      WHERE ".$this->getPrimaryKeyName()." = ?
+    ";
 		
-		$result = DB::query($query, array($key_value));
+		$result = DB::query($query, [$key_value]);
 		if ($row = $result->fetch_object()) {
 			$this->loadFromDbRow($row);
 		}
 	}
 	
-	
 	// Accepts either an object or an associative array representing a database record.
-	private function loadFromDbRow($row) {
-		
+	private function loadFromDbRow(mixed $row) {
 		if (is_object($row)) {
 			// The row is an object.
 			$row_data = get_object_vars($row);
@@ -61,9 +71,7 @@ abstract class Model {
 				$this->$var_name = $value;
 			}
 		}
-		
 	}
-	
 	
 	// Saves an object to the database. Inserts if new or updates if existing.
 	public function saveToDb() {
@@ -79,7 +87,7 @@ abstract class Model {
 			$field_list = implode(',', array_keys($db_save_array));
 			
 			// Prepare the placeholder string (a list of ?s)
-			$placeholders = array();
+			$placeholders = [];
 			for ($i=0; $i < count($db_save_array); $i++) {
 				$placeholders[] = '?';
 			}
@@ -98,10 +106,10 @@ abstract class Model {
 			
 			// Set the id on the object.
 			$this->setId(DB::getInsertId());
-			
-		} else {
+		}
+		else {
 			// Prepare the field list.
-			$fields = array();
+			$fields = [];
 			foreach (array_keys($db_save_array) as $field_name) {
 				$field_list[] = $field_name." = ?";
 			}
@@ -123,39 +131,33 @@ abstract class Model {
 			// Run the query.
 			DB::query($query, $values);
 		}
-		
 	}
-	
-	
 	
 	// Auto getter and setter functions.
 	// http://stackoverflow.com/a/8743064
-	public function __call($method, $params) {
-		
+	public function __call(string $method, array $params) {
 		// Auto getter.
 		if (strncasecmp($method, 'get', 3) == 0) {
 			$var = $this->convertCamelCaseToUnderscore(substr($method, 3));
 			return $this->$var;
 		}
+
 		// Auto setter.
 		if (strncasecmp($method, 'set', 3) == 0) {
 			$var = $this->convertCamelCaseToUnderscore(substr($method, 3));
 			$this->$var = $params[0];
 		}
 	}
-	
-	
+
 	// Convert a camel case variable to underscore.
 	// http://stackoverflow.com/a/1993772
-	private function convertCamelCaseToUnderscore($str) {
-		
+	private function convertCamelCaseToUnderscore(string $str) : string {
 		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $str, $matches);
 		$ret = $matches[0];
 		foreach ($ret as &$match) {
 			$match = (($match == strtoupper($match)) ? strtolower($match) : lcfirst($match));
 		}
 		return implode('_', $ret);
-		
 	}
 	
 	
