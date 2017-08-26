@@ -1,0 +1,12 @@
+{
+    "name": "toddmcneill/entramado",
+    "description": "A PHP Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Todd McNeill",
+            "email": "toddmcneill@gmail.com"
+        }
+    ],
+    "require": {}
+}
