@@ -1,6 +1,7 @@
 {
     "name": "toddmcneill/entramado",
     "description": "A PHP Framework",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -8,5 +9,10 @@
             "email": "toddmcneill@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-r": {
+            "":"lib/"
+        }
+    },
     "require": {}
 }
