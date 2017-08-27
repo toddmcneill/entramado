@@ -29,7 +29,6 @@ class Autoload {
 			'models',
 			'views',
 			'controllers',
-			'system'
 		];
 
 		// Look in each directory for the file.
